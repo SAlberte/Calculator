@@ -2,6 +2,7 @@ package com.example.calculator;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.media.audiofx.DynamicsProcessing;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -10,178 +11,116 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity
 {
-    String Equation="";
-    boolean IsError=false;
-
+    private EquationBuilder equationBuilder;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        equationBuilder = new EquationBuilder();
     }
 
-    public void plus(View view)
+    public void onButtonPlusClick(View view)
     {
-        Equation+=" + ";
-        Display(Equation);
+        equationBuilder.insertOperatorIntoEquation("+");
+        updateEquationTextView();
     }
 
-    public void minus(View view)
+    public void onButtonMinusClick(View view)
     {
-
-        Equation+=" - ";
-        Display(Equation);
+        equationBuilder.insertOperatorIntoEquation("-");
+        updateEquationTextView();
     }
 
-    public void multip(View view)
+    public void onButtonMultipClick(View view)
     {
-
-        Equation+=" * ";
-        Display(Equation);
+        equationBuilder.insertOperatorIntoEquation("*");
+        updateEquationTextView();
     }
 
-    public void division(View view)
+    public void onButtonDivisionClick(View view)
     {
-        Equation+=" / ";
-        Display(Equation);
+        equationBuilder.insertOperatorIntoEquation("/");
+        updateEquationTextView();
     }
 
-    public void One(View view)
+    public void onButtonOneClick(View view)
     {
-
-        Equation+="1";
-        Display(Equation);
+        equationBuilder.insertNumberIntoEquation("1");
+        updateEquationTextView();
     }
 
-    public void Two(View view)
+    public void onButtonTwoClick(View view)
     {
-
-        Equation+="2";
-        Display(Equation);
+        equationBuilder.insertNumberIntoEquation("2");
+        updateEquationTextView();
     }
 
-    public void Three(View view)
+    public void onButtonThreeClick(View view)
     {
-        Equation+="3";
-        Display(Equation);
+        equationBuilder.insertNumberIntoEquation("3");
+        updateEquationTextView();
     }
 
-    public void Four(View view)
+    public void onButtonFourClick(View view)
     {
-        Equation+="4";
-        Display(Equation);
+        equationBuilder.insertNumberIntoEquation("4");
+        updateEquationTextView();
     }
 
-    public void Five(View view)
+    public void onButtonFiveClick(View view)
     {
-
-        Equation+="5";
-        Display(Equation);
+        equationBuilder.insertNumberIntoEquation("5");
+        updateEquationTextView();
     }
 
-    public void Six(View view)
+    public void onButtonSixClick(View view)
     {
-        Equation+="6";
-        Display(Equation);
+        equationBuilder.insertNumberIntoEquation("6");
+        updateEquationTextView();
     }
 
-    public void Seven(View view)
+    public void onButtonSevenClick(View view)
     {
-        Equation+="7";
-        Display(Equation);
+        equationBuilder.insertNumberIntoEquation("7");
+        updateEquationTextView();
     }
 
-    public void Eight(View view)
+    public void onButtonEightClick(View view)
     {
-
-        Equation+="8";
-        Display(Equation);
+        equationBuilder.insertNumberIntoEquation("8");
+        updateEquationTextView();
     }
 
-    public void Nine(View view)
+    public void onButtonNineClick(View view)
     {
-        Equation+="9";
-        Display(Equation);
+        equationBuilder.insertNumberIntoEquation("9");
+        updateEquationTextView();
     }
 
-    public void Zero(View view)
+    public void onButtonZeroClick(View view)
     {
-        Equation+="0";
-        Display(Equation);
+        equationBuilder.insertNumberIntoEquation("0");
+        updateEquationTextView();
     }
 
-    public void ClearC(View view)
+    public void onButtonClearCClick(View view)
     {
-        Equation="";
-        Display(Equation);
+        equationBuilder.clearEquation();
+        updateEquationTextView();
     }
 
-    public void Equal(View view)
+    public void onButtonEqualClick(View view)
     {
-        Equation= Double.toString(SolveEquation());
-        if(IsError)
-        {Equation="ERROR";Display(Equation);IsError=false;}
-        Display(Equation);
-        Equation="";
+        float result = EquationSolver.solveEquation(equationBuilder.equation);
+        equationBuilder.equation = String.valueOf(result);
+        updateEquationTextView();
     }
 
-    public double SolveEquation()
-    {
-        int A=0;
-        int B=0;
-        char sign=' ';
-        boolean isFirstValue = true;
-        double result =0.d;
-        boolean isnegative=false;
-        for(int i=0;i<Equation.length();i++)
-        {
-            if(Objects.equals(Equation.charAt(i), ' '))
-            {
-                if(i==0)
-                {
-                    if(Objects.equals(Equation.charAt(i+1), '-'))
-                    {
-                        isnegative=true;
-                        i+=2;
-                        continue;
-                    }
-                }
-                sign = Equation.charAt(i + 1);
-                i += 2;
-                isFirstValue = false;
-                continue;
-            }
-            if(isFirstValue)
-                A=10*A+Character.getNumericValue(Equation.charAt(i));
-            else B=10*B+Character.getNumericValue(Equation.charAt(i));
-
-        }
-        if(isnegative) A*=-1;
-        switch(sign)
-        {
-            case '+':
-                result = (double)A+(double)B;
-                break;
-            case '-':
-                result = (double)A-(double)B;
-                break;
-            case '*':
-                result = (double)A*(double)B;
-                break;
-            case '/':
-                if(B==0)
-                    IsError=true;
-                else
-                 result = (double)A/(double)B;
-                 break;
-        }
-        return result;
-    }
-
-    public void Display(String equation)
+    public void updateEquationTextView()
     {
         TextView textView = (TextView) findViewById(R.id.Equationview);
-        textView.setText(equation);
+        textView.setText(equationBuilder.equation);
     }
 
 }
