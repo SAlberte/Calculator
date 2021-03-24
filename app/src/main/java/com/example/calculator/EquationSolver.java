@@ -19,6 +19,8 @@ public abstract class EquationSolver
         float result = 0;
         boolean isDivOrMul = true;
         boolean isAddOrSub = true;
+        if (numbers.size() != operators.size()+1)
+            return Float.NaN;
         while(isDivOrMul)
         {
             isDivOrMul = false;
@@ -86,7 +88,7 @@ public abstract class EquationSolver
             }
             if(allOperators.contains(String.valueOf(equation.charAt(i))) || i==equation.length()-1)
             {
-                if(i==equation.length()-1)
+                if(!allOperators.contains(String.valueOf(equation.charAt(i))))
                     number += String.valueOf(equation.charAt(i));
                 if(!number.equals(""))
                 {
