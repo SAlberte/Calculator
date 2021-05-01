@@ -3,7 +3,8 @@ package com.example.calculator;
 public class EquationBuilder
 {
     public String equation = "";
-    private final String allOperators = "+-/*";
+    private final String allOperators = "+-/*%";
+    public boolean canPlaceDot = true;
 
     public void insertOperatorIntoEquation(String operator)
     {
@@ -18,12 +19,20 @@ public class EquationBuilder
             {
                 equation = equation.substring(0, equation.length()-1);
                 equation += operator;
+                canPlaceDot = true;
             }
             else
+            {
                 equation += operator;
+                canPlaceDot = true;
+            }
+
         }
         else if(operator.equals("-"))
+        {
             equation += operator;
+            canPlaceDot = true;
+        }
     }
     private boolean checkIfValueNotNumber(String value)
     {
@@ -33,22 +42,44 @@ public class EquationBuilder
             System.out.println(myPotentialFloat);
             if(Float.isNaN(myPotentialFloat) || Float.isInfinite(myPotentialFloat))
             {
-                System.out.println("TU");
-                System.out.println(myPotentialFloat);
                 return true;
             }
         } catch(Exception e){}
         return false;
     }
+
+    private boolean isDot(String value)
+    {
+        return value.equals(".");
+    }
+
     public void insertNumberIntoEquation(String number)
     {
         if(checkIfValueNotNumber(equation))
             equation = "";
-        equation += number;
+        if(isDot(number) && isNumberBefore() && canPlaceDot)
+        {
+            canPlaceDot = false;
+            equation += number;
+        }
+        else if(!isDot(number))
+            equation += number;
+    }
+
+    private boolean isNumberBefore()
+    {
+        return (equation.length() > 0 &&
+                !allOperators.contains(String.valueOf(
+                        equation.charAt(equation.length()-1))));
     }
 
     public void clearEquation()
     {
         equation = "";
+    }
+
+    public void updateBuilderState()
+    {
+        canPlaceDot = !equation.contains(".");
     }
 }

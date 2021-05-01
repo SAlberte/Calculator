@@ -57,6 +57,13 @@ public class MainActivity extends AppCompatActivity
         updateEquationTextView();
     }
 
+    public void onButtonModClick(View view)
+    {
+        equationBuilder.insertOperatorIntoEquation("%");
+        vibrate();
+        updateEquationTextView();
+    }
+
     public void onButtonOneClick(View view)
     {
         equationBuilder.insertNumberIntoEquation("1");
@@ -127,11 +134,19 @@ public class MainActivity extends AppCompatActivity
         updateEquationTextView();
     }
 
+    public void onButtonDotClick (View view)
+    {
+        equationBuilder.insertNumberIntoEquation(".");
+        vibrate();
+        updateEquationTextView();
+    }
+
     public void onButtonClearCClick(View view)
     {
         equationBuilder.clearEquation();
         vibrate();
         updateEquationTextView();
+        equationBuilder.updateBuilderState();
     }
 
     public void onButtonEqualClick(View view)
@@ -140,6 +155,7 @@ public class MainActivity extends AppCompatActivity
         equationBuilder.equation = String.valueOf(result);
         vibrate();
         updateEquationTextView();
+        equationBuilder.updateBuilderState();
     }
 
     public void updateEquationTextView()

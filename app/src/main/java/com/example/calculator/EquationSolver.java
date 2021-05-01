@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public abstract class EquationSolver
 {
-    private final static String allOperators="*-+/";
+    private final static String allOperators="*-+/%";
 
     public static float solveEquation(String equation)
     {
@@ -26,7 +26,9 @@ public abstract class EquationSolver
             isDivOrMul = false;
             for(int i=0; i<operators.size(); i++)
             {
-                if(operators.get(i).equals("*") || operators.get(i).equals(("/")))
+                if(operators.get(i).equals("*") ||
+                        operators.get(i).equals(("/")) ||
+                        operators.get(i).equals("%"))
                 {
                     isDivOrMul = true;
                     if(operators.get(i).equals("*"))
@@ -36,10 +38,17 @@ public abstract class EquationSolver
                         numbers.remove(i+1);
                         break;
                     }
-                    else
+                    else if(operators.get(i).equals("/"))
                     {
                         operators.remove(i);
                         numbers.set(i, numbers.get(i)/numbers.get(i+1));
+                        numbers.remove(i+1);
+                        break;
+                    }
+                    else
+                    {
+                        operators.remove(i);
+                        numbers.set(i, numbers.get(i)%numbers.get(i+1));
                         numbers.remove(i+1);
                         break;
                     }
@@ -51,7 +60,8 @@ public abstract class EquationSolver
             isAddOrSub = false;
             for(int i=0; i<operators.size(); i++)
             {
-                if(operators.get(i).equals("+") || operators.get(i).equals(("-")))
+                if(operators.get(i).equals("+")
+                        || operators.get(i).equals(("-")))
                 {
                     isAddOrSub = true;
                     if(operators.get(i).equals("+"))
@@ -86,7 +96,8 @@ public abstract class EquationSolver
                 isNegative = true;
                 continue;
             }
-            if(allOperators.contains(String.valueOf(equation.charAt(i))) || i==equation.length()-1)
+            if(allOperators.contains(String.valueOf(equation.charAt(i)))
+                    || i==equation.length()-1)
             {
                 if(!allOperators.contains(String.valueOf(equation.charAt(i))))
                     number += String.valueOf(equation.charAt(i));
